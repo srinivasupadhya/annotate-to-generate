@@ -71,7 +71,7 @@ public class ClasspathAnnotationScanner {
 			}
 		}
 
-		uiForm = new UIForm(inputClass.getName(), null, null, uiElements);
+		uiForm = new UIForm(inputClass.getName(), uiElements);
 
 		return uiForm;
 	}
