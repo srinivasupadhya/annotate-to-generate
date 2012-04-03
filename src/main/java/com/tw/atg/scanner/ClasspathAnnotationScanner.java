@@ -4,25 +4,32 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tw.atg.annotation.GUIElement;
+import com.tw.atg.annotation.ATGUIElement;
+import com.tw.atg.annotation.ATGUIForm;
 import com.tw.atg.constant.ModelAttributeType;
 import com.tw.atg.constant.UIElementType;
-import com.tw.atg.model.ATGForm;
 import com.tw.atg.ui.UIElement;
+import com.tw.atg.ui.UIForm;
 import com.tw.atg.ui.UIPosition;
 
 /**
  * @understands: How to scan classes annotated for ATG UI generation
  */
 public class ClasspathAnnotationScanner {
-	public List<UIElement> scanForAnnotations(Class<? extends ATGForm> inputClass) {
+	public UIForm scanForAnnotations(Class<?> inputClass) {
+		UIForm uiForm = null;
 		List<UIElement> uiElements = new ArrayList<UIElement>();
 		Field[] fields = inputClass.getDeclaredFields();
+
+		ATGUIForm formAnnotation = inputClass.getAnnotation(ATGUIForm.class);
+		if (formAnnotation == null) {
+			return uiForm;
+		}
 
 		boolean autoLayout = true;
 
 		for (Field currentField : fields) {
-			GUIElement annotation = currentField.getAnnotation(GUIElement.class);
+			ATGUIElement elementAnnotation = currentField.getAnnotation(ATGUIElement.class);
 
 			// Model details
 			String modelClass = inputClass.getName();
@@ -31,26 +38,26 @@ public class ClasspathAnnotationScanner {
 			Object modelAttributeValue = null;
 			// UIElement label details
 			String uiElementLabel = currentField.getName();
-			if (annotation.label() != null && !annotation.label().trim().isEmpty())
-				uiElementLabel = annotation.label();
+			if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
+				uiElementLabel = elementAnnotation.label();
 			UIPosition uiElementLabelPosition = new UIPosition(0, 0);
-			if (annotation.labelRow() >= 0 && annotation.labelColumn() >= 0) {
-				uiElementLabelPosition = new UIPosition(annotation.labelRow(), annotation.labelColumn());
+			if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+				uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
 				autoLayout = false;
 			}
 			// UIElement details
-			UIElementType uiElementType = annotation.uiElementType();
+			UIElementType uiElementType = elementAnnotation.uiElementType();
 			String uiElementName = null;
 			String uiElementId = null;
 			UIPosition uiElementPosition = new UIPosition(0, 0);
-			if (annotation.row() >= 0 && annotation.column() >= 0) {
-				uiElementLabelPosition = new UIPosition(annotation.row(), annotation.column());
+			if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+				uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 				autoLayout = false;
 			}
 
-			if (annotation != null) {
-				UIElement uiElement = new UIElement(modelClass, modelAttributeType, modelAttributeName, modelAttributeValue, uiElementLabel, uiElementLabelPosition,
-						uiElementType, uiElementName, uiElementId, uiElementPosition);
+			if (elementAnnotation != null) {
+				UIElement uiElement = new UIElement(modelClass, modelAttributeType, modelAttributeName, modelAttributeValue, uiElementLabel,
+						uiElementLabelPosition, uiElementType, uiElementName, uiElementId, uiElementPosition);
 				uiElements.add(uiElement);
 			}
 		}
@@ -64,6 +71,8 @@ public class ClasspathAnnotationScanner {
 			}
 		}
 
-		return uiElements;
+		uiForm = new UIForm(inputClass.getName(), null, null, uiElements);
+
+		return uiForm;
 	}
 }

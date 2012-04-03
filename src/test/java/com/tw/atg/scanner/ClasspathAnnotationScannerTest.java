@@ -1,13 +1,10 @@
 package com.tw.atg.scanner;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.tw.atg.scanner.ClasspathAnnotationScanner;
-import com.tw.atg.ui.UIElement;
+import com.tw.atg.ui.UIForm;
 
 /**
  * Unit test for ClasspathAnnotationScanner.
@@ -15,7 +12,7 @@ import com.tw.atg.ui.UIElement;
 public class ClasspathAnnotationScannerTest {
 	@Test
 	public void testScanForAnnotations() {
-		List<UIElement> uiElements = new ClasspathAnnotationScanner().scanForAnnotations(AnnotatedClass.class);
-		assertEquals(uiElements.size(), 1);
+		UIForm uiForm = new ClasspathAnnotationScanner().scanForAnnotations(AnnotatedClass.class);
+		assertEquals(uiForm.getUiElements().size(), 1);
 	}
 }

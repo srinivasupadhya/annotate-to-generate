@@ -1,10 +1,11 @@
 package com.tw.atg.scanner;
 
-import com.tw.atg.annotation.GUIElement;
-import com.tw.atg.model.ATGForm;
+import com.tw.atg.annotation.ATGUIForm;
+import com.tw.atg.annotation.ATGUIElement;
 
-public class AnnotatedClass implements ATGForm {
-	@GUIElement(label = "Message")
+@ATGUIForm
+public class AnnotatedClass {
+	@ATGUIElement(label = "Message")
 	public String message;
 
 }
