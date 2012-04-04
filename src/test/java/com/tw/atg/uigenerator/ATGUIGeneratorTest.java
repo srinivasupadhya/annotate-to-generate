@@ -2,6 +2,8 @@ package com.tw.atg.uigenerator;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,7 +18,15 @@ public class ATGUIGeneratorTest {
 	public void testScanForAnnotations() {
 		UIForm uiForm = new ClasspathAnnotationScanner().scanForAnnotations(AnnotatedClass.class);
 		List<UIElement> uiElements = uiForm.getUiElements();
-		assertEquals(uiElements.size(), 1);
-		System.out.println(new ATGUIGenerator().generate(uiElements));
+		assertEquals(uiElements.size(), 2);
+		String generatedHTML = new ATGUIGenerator().generate(uiElements);
+		System.out.println(generatedHTML);
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("/tmp/generated.html"));
+			writer.write(generatedHTML);
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

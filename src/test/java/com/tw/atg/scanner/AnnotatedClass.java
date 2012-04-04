@@ -1,11 +1,15 @@
 package com.tw.atg.scanner;
 
-import com.tw.atg.annotation.ATGUIForm;
-import com.tw.atg.annotation.ATGUIElement;
+import com.tw.atg.annotation.ATGForm;
+import com.tw.atg.annotation.ATGTextArea;
+import com.tw.atg.annotation.ATGTextBox;
 
-@ATGUIForm
+@ATGForm
 public class AnnotatedClass {
-	@ATGUIElement(label = "Message")
+	@ATGTextBox(label = "Message")
 	public String message;
+
+	@ATGTextArea(label = "Test")
+	public String test;
 
 }

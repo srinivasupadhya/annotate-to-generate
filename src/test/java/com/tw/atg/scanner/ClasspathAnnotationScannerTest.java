@@ -13,6 +13,6 @@ public class ClasspathAnnotationScannerTest {
 	@Test
 	public void testScanForAnnotations() {
 		UIForm uiForm = new ClasspathAnnotationScanner().scanForAnnotations(AnnotatedClass.class);
-		assertEquals(uiForm.getUiElements().size(), 1);
+		assertEquals(uiForm.getUiElements().size(), 2);
 	}
 }

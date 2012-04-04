@@ -4,8 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tw.atg.annotation.ATGUIElement;
-import com.tw.atg.annotation.ATGUIForm;
+import com.tw.atg.annotation.ATGCheckBox;
+import com.tw.atg.annotation.ATGRadioButton;
+import com.tw.atg.annotation.ATGSelectBox;
+import com.tw.atg.annotation.ATGTextArea;
+import com.tw.atg.annotation.ATGTextBox;
+import com.tw.atg.annotation.ATGForm;
 import com.tw.atg.constant.ModelAttributeType;
 import com.tw.atg.constant.UIElementType;
 import com.tw.atg.ui.UIElement;
@@ -21,7 +25,7 @@ public class ClasspathAnnotationScanner {
 		List<UIElement> uiElements = new ArrayList<UIElement>();
 		Field[] fields = inputClass.getDeclaredFields();
 
-		ATGUIForm formAnnotation = inputClass.getAnnotation(ATGUIForm.class);
+		ATGForm formAnnotation = inputClass.getAnnotation(ATGForm.class);
 		if (formAnnotation == null) {
 			return uiForm;
 		}
@@ -29,7 +33,7 @@ public class ClasspathAnnotationScanner {
 		boolean autoLayout = true;
 
 		for (Field currentField : fields) {
-			ATGUIElement elementAnnotation = currentField.getAnnotation(ATGUIElement.class);
+			ATGTextBox elementAnnotation = currentField.getAnnotation(ATGTextBox.class);
 
 			// Model details
 			String modelClass = inputClass.getName();
@@ -46,7 +50,16 @@ public class ClasspathAnnotationScanner {
 				autoLayout = false;
 			}
 			// UIElement details
-			UIElementType uiElementType = elementAnnotation.uiElementType();
+			UIElementType uiElementType = UIElementType.TEXT_BOX;
+			if (elementAnnotation.equals(ATGTextArea.class))
+				uiElementType = UIElementType.TEXT_AREA;
+			else if (elementAnnotation.equals(ATGRadioButton.class))
+				uiElementType = UIElementType.RADIO_BUTTON;
+			else if (elementAnnotation.equals(ATGCheckBox.class))
+				uiElementType = UIElementType.CHECK_BOX;
+			else if (elementAnnotation.equals(ATGSelectBox.class))
+				uiElementType = UIElementType.SELECT_BOX;
+
 			String uiElementName = null;
 			String uiElementId = null;
 			UIPosition uiElementPosition = new UIPosition(0, 0);
