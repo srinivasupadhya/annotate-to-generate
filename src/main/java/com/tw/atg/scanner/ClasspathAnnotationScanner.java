@@ -17,6 +17,7 @@ import com.tw.atg.constant.UIElementType;
 import com.tw.atg.ui.UIElement;
 import com.tw.atg.ui.UIForm;
 import com.tw.atg.ui.UIPosition;
+import com.tw.atg.util.StringUtil;
 
 /**
  * @understands: How to scan classes annotated for ATG UI generation
@@ -31,6 +32,9 @@ public class ClasspathAnnotationScanner {
 	private UIPosition uiElementLabelPosition;
 	private String uiElementName, uiElementId;
 	private UIPosition uiElementPosition;
+	private String uiElementDefaultValue;
+	private int uiElementSize, uiElementMaxLength;
+	private boolean uiElementIsDisabled, uiElementIsReadOnly;
 
 	public UIForm scanForAnnotations(Class<?> inputClass) {
 		ATGForm classAnnotation = inputClass.getAnnotation(ATGForm.class);
@@ -84,10 +88,14 @@ public class ClasspathAnnotationScanner {
 		uiElementName = null;
 		uiElementId = null;
 		uiElementPosition = null;
+		uiElementDefaultValue = null;
+		uiElementSize = -1;
+		uiElementMaxLength = -1;
+		uiElementIsDisabled = false;
+		uiElementIsReadOnly = false;
 	}
 
 	private void findUIElementType(Annotation currentFieldAnnotation) {
-		uiElementType = null;
 		if (currentFieldAnnotation instanceof ATGTextBox)
 			uiElementType = UIElementType.TEXT_BOX;
 		else if (currentFieldAnnotation instanceof ATGPasswordBox)
@@ -108,24 +116,140 @@ public class ClasspathAnnotationScanner {
 			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case PASSWORD_BOX:
-			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGPasswordBox((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case TEXT_AREA:
-			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGTextArea((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case RADIO_BUTTON:
-			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGRadioButton((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case CHECK_BOX:
-			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGCheckBox((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case SELECT_BOX:
-			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGSelectBox((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		}
 	}
 
 	private void readATGTextBox(ATGTextBox elementAnnotation, Field field) {
+		uiElementLabel = field.getName();
+		if (!StringUtil.isEmpty(elementAnnotation.label()))
+			uiElementLabel = elementAnnotation.label();
+
+		uiElementLabelPosition = new UIPosition(0, 0);
+		if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
+			autoLayout = false;
+		}
+
+		uiElementPosition = new UIPosition(0, 0);
+		if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
+			autoLayout = false;
+		}
+
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.size() >= 0)
+			uiElementSize = elementAnnotation.size();
+
+		if (elementAnnotation.maxLength() >= 0)
+			uiElementMaxLength = elementAnnotation.maxLength();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
+
+		if (elementAnnotation.isReadOnly() == true)
+			uiElementIsReadOnly = true;
+	}
+
+	private void readATGPasswordBox(ATGTextBox elementAnnotation, Field field) {
+		uiElementLabel = field.getName();
+		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
+			uiElementLabel = elementAnnotation.label();
+		uiElementLabelPosition = new UIPosition(0, 0);
+		if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
+			autoLayout = false;
+		}
+
+		uiElementPosition = new UIPosition(0, 0);
+		if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
+			autoLayout = false;
+		}
+		
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.size() >= 0)
+			uiElementSize = elementAnnotation.size();
+
+		if (elementAnnotation.maxLength() >= 0)
+			uiElementMaxLength = elementAnnotation.maxLength();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
+
+		if (elementAnnotation.isReadOnly() == true)
+			uiElementIsReadOnly = true;
+	}
+
+	private void readATGTextArea(ATGTextBox elementAnnotation, Field field) {
+		uiElementLabel = field.getName();
+		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
+			uiElementLabel = elementAnnotation.label();
+		uiElementLabelPosition = new UIPosition(0, 0);
+		if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
+			autoLayout = false;
+		}
+
+		uiElementPosition = new UIPosition(0, 0);
+		if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
+			autoLayout = false;
+		}
+	}
+
+	private void readATGRadioButton(ATGTextBox elementAnnotation, Field field) {
+		uiElementLabel = field.getName();
+		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
+			uiElementLabel = elementAnnotation.label();
+		uiElementLabelPosition = new UIPosition(0, 0);
+		if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
+			autoLayout = false;
+		}
+
+		uiElementPosition = new UIPosition(0, 0);
+		if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
+			autoLayout = false;
+		}
+	}
+
+	private void readATGCheckBox(ATGTextBox elementAnnotation, Field field) {
+		uiElementLabel = field.getName();
+		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
+			uiElementLabel = elementAnnotation.label();
+		uiElementLabelPosition = new UIPosition(0, 0);
+		if (elementAnnotation.labelRow() >= 0 && elementAnnotation.labelColumn() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.labelRow(), elementAnnotation.labelColumn());
+			autoLayout = false;
+		}
+
+		uiElementPosition = new UIPosition(0, 0);
+		if (elementAnnotation.row() >= 0 && elementAnnotation.column() >= 0) {
+			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
+			autoLayout = false;
+		}
+	}
+
+	private void readATGSelectBox(ATGTextBox elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
