@@ -32,9 +32,11 @@ public class ClasspathAnnotationScanner {
 	private UIPosition uiElementLabelPosition;
 	private String uiElementName, uiElementId;
 	private UIPosition uiElementPosition;
+	private String[][] displayNameNValuePairs;
 	private String uiElementDefaultValue;
 	private int uiElementSize, uiElementMaxLength;
-	private boolean uiElementIsDisabled, uiElementIsReadOnly;
+	private int uiElementWidth, uiElementHeight;
+	private boolean uiElementIsDisabled, uiElementIsReadOnly, isRequired;
 
 	public UIForm scanForAnnotations(Class<?> inputClass) {
 		ATGForm classAnnotation = inputClass.getAnnotation(ATGForm.class);
@@ -67,7 +69,8 @@ public class ClasspathAnnotationScanner {
 				readAnnotationAttributes(currentField, currentFieldAnnotation);
 
 				UIElement uiElement = new UIElement(modelClass, modelAttributeType, modelAttributeName, modelAttributeValue, uiElementLabel,
-						uiElementLabelPosition, uiElementType, uiElementName, uiElementId, uiElementPosition);
+						uiElementLabelPosition, uiElementType, uiElementName, uiElementId, uiElementPosition, displayNameNValuePairs, uiElementDefaultValue,
+						uiElementSize, uiElementMaxLength, uiElementWidth, uiElementHeight, uiElementIsDisabled, uiElementIsReadOnly, isRequired);
 				uiElements.add(uiElement);
 
 				break; // not interested in rest of the annotations of field
@@ -88,11 +91,15 @@ public class ClasspathAnnotationScanner {
 		uiElementName = null;
 		uiElementId = null;
 		uiElementPosition = null;
+		displayNameNValuePairs = null;
 		uiElementDefaultValue = null;
 		uiElementSize = -1;
 		uiElementMaxLength = -1;
+		uiElementWidth = -1;
+		uiElementHeight = -1;
 		uiElementIsDisabled = false;
 		uiElementIsReadOnly = false;
+		isRequired = true;
 	}
 
 	private void findUIElementType(Annotation currentFieldAnnotation) {
@@ -116,19 +123,19 @@ public class ClasspathAnnotationScanner {
 			readATGTextBox((ATGTextBox) currentFieldAnnotation, currentField);
 			break;
 		case PASSWORD_BOX:
-			readATGPasswordBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGPasswordBox((ATGPasswordBox) currentFieldAnnotation, currentField);
 			break;
 		case TEXT_AREA:
-			readATGTextArea((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGTextArea((ATGTextArea) currentFieldAnnotation, currentField);
 			break;
 		case RADIO_BUTTON:
-			readATGRadioButton((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGRadioButton((ATGRadioButton) currentFieldAnnotation, currentField);
 			break;
 		case CHECK_BOX:
-			readATGCheckBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGCheckBox((ATGCheckBox) currentFieldAnnotation, currentField);
 			break;
 		case SELECT_BOX:
-			readATGSelectBox((ATGTextBox) currentFieldAnnotation, currentField);
+			readATGSelectBox((ATGSelectBox) currentFieldAnnotation, currentField);
 			break;
 		}
 	}
@@ -166,7 +173,7 @@ public class ClasspathAnnotationScanner {
 			uiElementIsReadOnly = true;
 	}
 
-	private void readATGPasswordBox(ATGTextBox elementAnnotation, Field field) {
+	private void readATGPasswordBox(ATGPasswordBox elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
@@ -181,7 +188,7 @@ public class ClasspathAnnotationScanner {
 			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 			autoLayout = false;
 		}
-		
+
 		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
 			uiElementDefaultValue = elementAnnotation.defaultValue();
 
@@ -198,7 +205,7 @@ public class ClasspathAnnotationScanner {
 			uiElementIsReadOnly = true;
 	}
 
-	private void readATGTextArea(ATGTextBox elementAnnotation, Field field) {
+	private void readATGTextArea(ATGTextArea elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
@@ -213,9 +220,24 @@ public class ClasspathAnnotationScanner {
 			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 			autoLayout = false;
 		}
+
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.width() >= 0)
+			uiElementWidth = elementAnnotation.width();
+
+		if (elementAnnotation.height() >= 0)
+			uiElementHeight = elementAnnotation.height();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
+
+		if (elementAnnotation.isReadOnly() == true)
+			uiElementIsReadOnly = true;
 	}
 
-	private void readATGRadioButton(ATGTextBox elementAnnotation, Field field) {
+	private void readATGRadioButton(ATGRadioButton elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
@@ -230,9 +252,25 @@ public class ClasspathAnnotationScanner {
 			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 			autoLayout = false;
 		}
+
+		String[] displayNames = elementAnnotation.displayNames();
+		String[] values = elementAnnotation.values();
+		if (displayNames != null && values != null && displayNames.length == values.length) {
+			displayNameNValuePairs = new String[displayNames.length][2];
+			for (int i = 0; i < displayNames.length; i++) {
+				displayNameNValuePairs[i][0] = displayNames[i];
+				displayNameNValuePairs[i][1] = values[i];
+			}
+		}
+
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
 	}
 
-	private void readATGCheckBox(ATGTextBox elementAnnotation, Field field) {
+	private void readATGCheckBox(ATGCheckBox elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
@@ -247,9 +285,25 @@ public class ClasspathAnnotationScanner {
 			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 			autoLayout = false;
 		}
+
+		String[] displayNames = elementAnnotation.displayNames();
+		String[] values = elementAnnotation.values();
+		if (displayNames != null && values != null && displayNames.length == values.length) {
+			displayNameNValuePairs = new String[displayNames.length][2];
+			for (int i = 0; i < displayNames.length; i++) {
+				displayNameNValuePairs[i][0] = displayNames[i];
+				displayNameNValuePairs[i][1] = values[i];
+			}
+		}
+
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
 	}
 
-	private void readATGSelectBox(ATGTextBox elementAnnotation, Field field) {
+	private void readATGSelectBox(ATGSelectBox elementAnnotation, Field field) {
 		uiElementLabel = field.getName();
 		if (elementAnnotation.label() != null && !elementAnnotation.label().trim().isEmpty())
 			uiElementLabel = elementAnnotation.label();
@@ -264,6 +318,22 @@ public class ClasspathAnnotationScanner {
 			uiElementLabelPosition = new UIPosition(elementAnnotation.row(), elementAnnotation.column());
 			autoLayout = false;
 		}
+
+		String[] displayNames = elementAnnotation.displayNames();
+		String[] values = elementAnnotation.values();
+		if (displayNames != null && values != null && displayNames.length == values.length) {
+			displayNameNValuePairs = new String[displayNames.length][2];
+			for (int i = 0; i < displayNames.length; i++) {
+				displayNameNValuePairs[i][0] = displayNames[i];
+				displayNameNValuePairs[i][1] = values[i];
+			}
+		}
+
+		if (!StringUtil.isEmpty(elementAnnotation.defaultValue()))
+			uiElementDefaultValue = elementAnnotation.defaultValue();
+
+		if (elementAnnotation.isDisabled() == true)
+			uiElementIsDisabled = true;
 	}
 
 	private void calculateLayout() {

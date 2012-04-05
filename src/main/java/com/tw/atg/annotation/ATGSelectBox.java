@@ -17,4 +17,14 @@ public @interface ATGSelectBox {
 	int row() default -1;
 
 	int column() default -1;
+
+	String[] displayNames() default {};
+
+	String[] values() default {};
+
+	String defaultValue() default "";
+
+	boolean isDisabled() default false;
+
+	boolean isRequired() default true;
 }

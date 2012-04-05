@@ -27,4 +27,6 @@ public @interface ATGTextArea {
 	boolean isDisabled() default false;
 
 	boolean isReadOnly() default false;
+	
+	boolean isRequired() default true;
 }

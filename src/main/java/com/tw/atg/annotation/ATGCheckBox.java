@@ -25,4 +25,6 @@ public @interface ATGCheckBox {
 	String defaultValue() default "";
 
 	boolean isDisabled() default false;
+	
+	boolean isRequired() default true;
 }

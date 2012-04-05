@@ -19,8 +19,20 @@ public class UIElement {
 	private String uiElementId;
 	private UIPosition uiElementPosition;
 
+	private String[][] displayNameNValuePairs;
+	private String uiElementDefaultValue;
+	private int uiElementSize;
+	private int uiElementMaxLength;
+	private int uiElementWidth;
+	private int uiElementHeight;
+	private boolean uiElementIsDisabled;
+	private boolean uiElementIsReadOnly;
+	private boolean isRequired;
+
 	public UIElement(String modelClass, ModelAttributeType modelAttributeType, String modelAttributeName, Object modelAttributeValue, String uiElementLabel,
-			UIPosition uiElementLabelPosition, UIElementType uiElementType, String uiElementName, String uiElementId, UIPosition uiElementPosition) {
+			UIPosition uiElementLabelPosition, UIElementType uiElementType, String uiElementName, String uiElementId, UIPosition uiElementPosition,
+			String[][] displayNameNValuePairs, String uiElementDefaultValue, int uiElementSize, int uiElementMaxLength, int uiElementWidth,
+			int uiElementHeight, boolean uiElementIsDisabled, boolean uiElementIsReadOnly, boolean isRequired) {
 		super();
 		this.modelClass = modelClass;
 		this.modelAttributeType = modelAttributeType;
@@ -32,6 +44,15 @@ public class UIElement {
 		this.uiElementName = uiElementName;
 		this.uiElementId = uiElementId;
 		this.uiElementPosition = uiElementPosition;
+		this.displayNameNValuePairs = displayNameNValuePairs;
+		this.uiElementDefaultValue = uiElementDefaultValue;
+		this.uiElementSize = uiElementSize;
+		this.uiElementMaxLength = uiElementMaxLength;
+		this.uiElementWidth = uiElementWidth;
+		this.uiElementHeight = uiElementHeight;
+		this.uiElementIsDisabled = uiElementIsDisabled;
+		this.uiElementIsReadOnly = uiElementIsReadOnly;
+		this.isRequired = isRequired;
 	}
 
 	public String getModelClass() {
@@ -112,5 +133,77 @@ public class UIElement {
 
 	public void setUiElementPosition(UIPosition uiElementPosition) {
 		this.uiElementPosition = uiElementPosition;
+	}
+
+	public String[][] getDisplayNameNValuePairs() {
+		return displayNameNValuePairs;
+	}
+
+	public void setDisplayNameNValuePairs(String[][] displayNameNValuePairs) {
+		this.displayNameNValuePairs = displayNameNValuePairs;
+	}
+
+	public String getUiElementDefaultValue() {
+		return uiElementDefaultValue;
+	}
+
+	public void setUiElementDefaultValue(String uiElementDefaultValue) {
+		this.uiElementDefaultValue = uiElementDefaultValue;
+	}
+
+	public int getUiElementSize() {
+		return uiElementSize;
+	}
+
+	public void setUiElementSize(int uiElementSize) {
+		this.uiElementSize = uiElementSize;
+	}
+
+	public int getUiElementMaxLength() {
+		return uiElementMaxLength;
+	}
+
+	public void setUiElementMaxLength(int uiElementMaxLength) {
+		this.uiElementMaxLength = uiElementMaxLength;
+	}
+
+	public int getUiElementWidth() {
+		return uiElementWidth;
+	}
+
+	public void setUiElementWidth(int uiElementWidth) {
+		this.uiElementWidth = uiElementWidth;
+	}
+
+	public int getUiElementHeight() {
+		return uiElementHeight;
+	}
+
+	public void setUiElementHeight(int uiElementHeight) {
+		this.uiElementHeight = uiElementHeight;
+	}
+
+	public boolean isUiElementIsDisabled() {
+		return uiElementIsDisabled;
+	}
+
+	public void setUiElementIsDisabled(boolean uiElementIsDisabled) {
+		this.uiElementIsDisabled = uiElementIsDisabled;
+	}
+
+	public boolean isUiElementIsReadOnly() {
+		return uiElementIsReadOnly;
+	}
+
+	public void setUiElementIsReadOnly(boolean uiElementIsReadOnly) {
+		this.uiElementIsReadOnly = uiElementIsReadOnly;
+	}
+
+	public boolean isRequired() {
+		return isRequired;
+	}
+
+	public void setRequired(boolean isRequired) {
+		this.isRequired = isRequired;
 	}
 }

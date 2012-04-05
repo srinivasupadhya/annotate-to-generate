@@ -3,6 +3,7 @@ package com.tw.atg.uigenerator;
 import java.util.List;
 
 import com.tw.atg.ui.UIElement;
+import com.tw.atg.util.StringUtil;
 
 public class ATGUIGenerator {
 	public String generate(List<UIElement> uiElements) {
@@ -21,11 +22,11 @@ public class ATGUIGenerator {
 			result.append("<td>");
 
 			elementUINameAttribute = "";
-			if (currentUIElement.getUiElementName() != null && !currentUIElement.getUiElementName().trim().isEmpty())
+			if (!StringUtil.isEmpty(currentUIElement.getUiElementName()))
 				elementUINameAttribute = " name=\"" + currentUIElement.getUiElementName() + "\" ";
 
 			elementUIIdAttribute = "";
-			if (currentUIElement.getUiElementId() != null && !currentUIElement.getUiElementId().trim().isEmpty())
+			if (!StringUtil.isEmpty(currentUIElement.getUiElementId()))
 				elementUIIdAttribute = " id=\"" + currentUIElement.getUiElementId() + "\" ";
 
 			switch (currentUIElement.getUiElementType()) {
