@@ -10,8 +10,9 @@ import org.junit.Test;
 
 import com.tw.atg.scanner.AnnotatedClass;
 import com.tw.atg.scanner.ClasspathAnnotationScanner;
-import com.tw.atg.ui.UIElement;
-import com.tw.atg.ui.UIForm;
+import com.tw.atg.ui.generator.ATGDefaultHTMLUIGenerator;
+import com.tw.atg.ui.model.UIElement;
+import com.tw.atg.ui.model.UIForm;
 
 public class ATGUIGeneratorTest {
 	@Test
@@ -19,7 +20,7 @@ public class ATGUIGeneratorTest {
 		UIForm uiForm = new ClasspathAnnotationScanner().scanForAnnotations(AnnotatedClass.class);
 		List<UIElement> uiElements = uiForm.getUiElements();
 		assertEquals(uiElements.size(), 2);
-		String generatedHTML = new ATGUIGenerator().generate(uiElements);
+		String generatedHTML = new ATGDefaultHTMLUIGenerator().generate(uiElements);
 		System.out.println(generatedHTML);
 		try {
 			BufferedWriter writer = new BufferedWriter(new FileWriter("/tmp/generated.html"));

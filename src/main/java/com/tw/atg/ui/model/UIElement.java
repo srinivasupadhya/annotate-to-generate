@@ -1,4 +1,4 @@
-package com.tw.atg.ui;
+package com.tw.atg.ui.model;
 
 import com.tw.atg.constant.ModelAttributeType;
 import com.tw.atg.constant.UIElementType;
@@ -19,7 +19,7 @@ public class UIElement {
 	private String uiElementId;
 	private UIPosition uiElementPosition;
 
-	private String[][] displayNameNValuePairs;
+	private String[][] uiElementDisplayNameNValuePairs;
 	private String uiElementDefaultValue;
 	private int uiElementSize;
 	private int uiElementMaxLength;
@@ -31,7 +31,7 @@ public class UIElement {
 
 	public UIElement(String modelClass, ModelAttributeType modelAttributeType, String modelAttributeName, Object modelAttributeValue, String uiElementLabel,
 			UIPosition uiElementLabelPosition, UIElementType uiElementType, String uiElementName, String uiElementId, UIPosition uiElementPosition,
-			String[][] displayNameNValuePairs, String uiElementDefaultValue, int uiElementSize, int uiElementMaxLength, int uiElementWidth,
+			String[][] uiElementDisplayNameNValuePairs, String uiElementDefaultValue, int uiElementSize, int uiElementMaxLength, int uiElementWidth,
 			int uiElementHeight, boolean uiElementIsDisabled, boolean uiElementIsReadOnly, boolean isRequired) {
 		super();
 		this.modelClass = modelClass;
@@ -44,7 +44,7 @@ public class UIElement {
 		this.uiElementName = uiElementName;
 		this.uiElementId = uiElementId;
 		this.uiElementPosition = uiElementPosition;
-		this.displayNameNValuePairs = displayNameNValuePairs;
+		this.uiElementDisplayNameNValuePairs = uiElementDisplayNameNValuePairs;
 		this.uiElementDefaultValue = uiElementDefaultValue;
 		this.uiElementSize = uiElementSize;
 		this.uiElementMaxLength = uiElementMaxLength;
@@ -135,12 +135,12 @@ public class UIElement {
 		this.uiElementPosition = uiElementPosition;
 	}
 
-	public String[][] getDisplayNameNValuePairs() {
-		return displayNameNValuePairs;
+	public String[][] getUiElementDisplayNameNValuePairs() {
+		return uiElementDisplayNameNValuePairs;
 	}
 
-	public void setDisplayNameNValuePairs(String[][] displayNameNValuePairs) {
-		this.displayNameNValuePairs = displayNameNValuePairs;
+	public void setUiElementDisplayNameNValuePairs(String[][] uiElementDisplayNameNValuePairs) {
+		this.uiElementDisplayNameNValuePairs = uiElementDisplayNameNValuePairs;
 	}
 
 	public String getUiElementDefaultValue() {
@@ -183,7 +183,7 @@ public class UIElement {
 		this.uiElementHeight = uiElementHeight;
 	}
 
-	public boolean isUiElementIsDisabled() {
+	public boolean getUiElementIsDisabled() {
 		return uiElementIsDisabled;
 	}
 
@@ -191,7 +191,7 @@ public class UIElement {
 		this.uiElementIsDisabled = uiElementIsDisabled;
 	}
 
-	public boolean isUiElementIsReadOnly() {
+	public boolean getUiElementIsReadOnly() {
 		return uiElementIsReadOnly;
 	}
 
@@ -199,7 +199,7 @@ public class UIElement {
 		this.uiElementIsReadOnly = uiElementIsReadOnly;
 	}
 
-	public boolean isRequired() {
+	public boolean getRequired() {
 		return isRequired;
 	}
 

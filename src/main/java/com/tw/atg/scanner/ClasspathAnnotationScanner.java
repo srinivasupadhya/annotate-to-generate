@@ -14,9 +14,9 @@ import com.tw.atg.annotation.ATGTextBox;
 import com.tw.atg.annotation.ATGForm;
 import com.tw.atg.constant.ModelAttributeType;
 import com.tw.atg.constant.UIElementType;
-import com.tw.atg.ui.UIElement;
-import com.tw.atg.ui.UIForm;
-import com.tw.atg.ui.UIPosition;
+import com.tw.atg.ui.model.UIElement;
+import com.tw.atg.ui.model.UIForm;
+import com.tw.atg.ui.model.UIPosition;
 import com.tw.atg.util.StringUtil;
 
 /**
@@ -258,8 +258,8 @@ public class ClasspathAnnotationScanner {
 		if (displayNames != null && values != null && displayNames.length == values.length) {
 			displayNameNValuePairs = new String[displayNames.length][2];
 			for (int i = 0; i < displayNames.length; i++) {
-				displayNameNValuePairs[i][0] = displayNames[i];
-				displayNameNValuePairs[i][1] = values[i];
+				displayNameNValuePairs[i][0] = values[i];
+				displayNameNValuePairs[i][1] = displayNames[i];
 			}
 		}
 

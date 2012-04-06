@@ -1,4 +1,4 @@
-package com.tw.atg.ui;
+package com.tw.atg.ui.model;
 
 public class UIPosition {
 	private Integer row, column;

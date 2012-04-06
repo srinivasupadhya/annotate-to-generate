@@ -1,4 +1,4 @@
-package com.tw.atg.ui;
+package com.tw.atg.ui.model;
 
 import java.util.List;
 

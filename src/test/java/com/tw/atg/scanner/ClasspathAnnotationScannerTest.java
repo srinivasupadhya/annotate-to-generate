@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.tw.atg.ui.UIForm;
+import com.tw.atg.ui.model.UIForm;
 
 /**
  * Unit test for ClasspathAnnotationScanner.
